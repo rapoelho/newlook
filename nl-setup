@@ -4,18 +4,45 @@
 LightDMBack="Autumn Countryside Landscape.png"
 
 echo "## Ativando o Repositório Comunitário"
-setup-apkrepos -c -f
+setup-apkrepos -o
 
 echo "## Instalando o Xorg"
 sleep 1
 apk add xorg-server xf86-input-libinput xinit eudev mesa-dri-gallium
+
+echo "## Habilitando udev"
+
+if rc-service --exists mdevd ; then
+		rc-service --ifstarted --quiet hwdrivers stop
+		rc-service --ifstarted --quiet mdevd stop
+		rc-update delete --quiet --quiet hwdrivers sysinit || :
+		rc-update delete --quiet --quiet mdevd-init sysinit 2>/dev/null || :
+		rc-update delete --quiet --quiet mdevd sysinit 2>/dev/null || :
+fi
+
+if rc-service --exists mdev ; then
+	rc-service --ifstarted --quiet hwdrivers stop
+	rc-service --ifstarted --quiet mdev stop
+	rc-update delete --quiet --quiet hwdrivers sysinit || :
+	rc-update delete --quiet --quiet mdev sysinit || :
+fi
+
+apk add --quiet eudev udev-init-scripts udev-init-scripts-openrc
+rc-update add  udev sysinit
+rc-update add  udev-trigger sysinit
+rc-update add  udev-settle sysinit
+rc-update add  quiet udev-postmount default
+rc-service ifstopped udev start
+rc-service ifstopped udev-trigger start
+rc-service ifstopped udev-settle start
+rc-service ifstopped udev-postmount start
 
 echo "## Instalando o Desktop"
 sleep 1
 apk add xfce4 firefox elogind gvfs lightdm lightdm-gtk-greeter polkit-elogind xfce4-screensaver xfce4-terminal font-dejavu
 
 echo "## Instalando outros Programas"
-sleep
+sleep 1
 apk add fastfetch alacritty flatpak mpv ristretto geany xarchiver htop conky xfce4-power-manager xdg-user-dirs pulseaudio network-manager-applet cups sane zathura thunar-volman thunar-media-tags-plugin thunar-archive-plugin networkmanager acpi xfce-polkit unzip zip conky papirus-icon-theme udisks2 blueman bluez xfce4-pulseaudio-plugin pavucontrol xfce4-screenshooter gtk-murrine-engine sound-theme-freedesktop pulseaudio-utils xfce4-notifyd xclip brightnessctl tlp
 
 echo "## Copiando Wallpapers"
