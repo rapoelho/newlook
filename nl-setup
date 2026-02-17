@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+## VARIABLES
+LightDMBack="Autumn Countryside Landscape.png"
+
 echo "## Ativando o Repositório Comunitário"
 setup-apkrepos -c -f
 
@@ -15,9 +18,19 @@ echo "## Instalando outros Programas"
 sleep
 apk add fastfetch alacritty flatpak mpv ristretto geany xarchiver htop conky xfce4-power-manager xdg-user-dirs pulseaudio network-manager-applet cups sane zathura thunar-volman thunar-media-tags-plugin thunar-archive-plugin networkmanager acpi xfce-polkit unzip zip conky papirus-icon-theme udisks2 blueman bluez xfce4-pulseaudio-plugin pavucontrol xfce4-screenshooter gtk-murrine-engine sound-theme-freedesktop pulseaudio-utils xfce4-notifyd xclip brightnessctl tlp
 
-echo "## Ativando o LightDM"
+echo "## Copiando Wallpapers"
+sudo cp backgrounds/* /usr/share/backgrounds/
+
+echo "## Ativando e Configurando o LightDM"
 sleep 1
 rc-update add lightdm
+sudo cp "/usr/share/backgrounds/$LightDMBack" /usr/share/pixmaps
+sudo mv "/usr/share/pixmaps/$LightDMBack" "/usr/share/pixmaps/background.png"
+sudo sed -i 's|^#\(background=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+sudo sed -i 's|^background=.*|background=/usr/share/pixmaps/background.png|' /etc/lightdm/lightdm-gtk-greeter.conf
+sudo sed -i 's|^#\(icon-theme-name=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+sudo sed -i 's|^icon-theme-name=.*|icon-theme-name=Papirus-Dark|' /etc/lightdm/lightdm-gtk-greeter.conf
+
 
 echo "## Ativando o Dbus"
 rc-update add dbus
