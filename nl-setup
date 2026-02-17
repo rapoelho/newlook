@@ -36,3 +36,5 @@ communityRepo () {
 	
 	apk update --quiet $apk_root_opt && echo "done."
 }
+
+communityRepo
