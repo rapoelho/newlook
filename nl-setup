@@ -1,4 +1,20 @@
 #!/usr/bin/env bash
 
+echo "## Ativando o Repositório Comunitário"
 setup-apkrepos -c -f
-setup-desktop xfce
+
+echo "## Instalando o Xorg"
+sleep 1
+apk add xorg-server xf86-input-libinput xinit eudev mesa-dri-gallium
+
+echo "## Instalando o Desktop"
+sleep 1
+apk add xfce4 firefox elogind gvfs lightdm lightdm-gtk-greeter polkit-elogind xfce4-screensaver xfce4-terminal font-dejavu
+
+echo "## Ativando o LightDM"
+sleep 1
+rc-update add lightdm
+
+echo "## Ativando o Dbus"
+rc-update add dbus
+
