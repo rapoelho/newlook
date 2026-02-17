@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 ## VARIABLES
 LightDMBack="Autumn Countryside Landscape.png"
@@ -32,10 +33,10 @@ rc-update add  udev sysinit
 rc-update add  udev-trigger sysinit
 rc-update add  udev-settle sysinit
 rc-update add  quiet udev-postmount default
-rc-service ifstopped udev start
-rc-service ifstopped udev-trigger start
-rc-service ifstopped udev-settle start
-rc-service ifstopped udev-postmount start
+rc-service --ifstopped udev start
+rc-service --ifstopped udev-trigger start
+rc-service --ifstopped udev-settle start
+rc-service --ifstopped udev-postmount start
 
 echo "## Instalando o Desktop"
 sleep 1
@@ -68,3 +69,7 @@ rc-update add networkmanager
 echo "## Ativando o TLP"
 rc-update add tlp
 
+for sec in `seq 5 -1 1`; do
+		echo "## Reiniciando em $sec segundos"
+		sleep 1
+done
