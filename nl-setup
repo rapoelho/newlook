@@ -14,25 +14,25 @@ apk add xorg-server xf86-input-libinput xinit eudev mesa-dri-gallium
 echo "## Habilitando udev"
 
 if rc-service --exists mdevd ; then
-		rc-service --ifstarted --quiet hwdrivers stop
-		rc-service --ifstarted --quiet mdevd stop
-		rc-update delete --quiet --quiet hwdrivers sysinit || :
-		rc-update delete --quiet --quiet mdevd-init sysinit 2>/dev/null || :
-		rc-update delete --quiet --quiet mdevd sysinit 2>/dev/null || :
+	rc-service --ifstarted --quiet hwdrivers stop
+	rc-service --ifstarted --quiet mdevd stop
+	rc-update delete  hwdrivers sysinit || :
+	rc-update delete  mdevd-init sysinit 2>/dev/null || :
+	rc-update delete  mdevd sysinit 2>/dev/null || :
 fi
 
 if rc-service --exists mdev ; then
 	rc-service --ifstarted --quiet hwdrivers stop
 	rc-service --ifstarted --quiet mdev stop
-	rc-update delete --quiet --quiet hwdrivers sysinit || :
-	rc-update delete --quiet --quiet mdev sysinit || :
+	rc-update delete hwdrivers sysinit || :
+	rc-update delete mdev sysinit || :
 fi
 
 apk add --quiet eudev udev-init-scripts udev-init-scripts-openrc
 rc-update add  udev sysinit
 rc-update add  udev-trigger sysinit
 rc-update add  udev-settle sysinit
-rc-update add  quiet udev-postmount default
+rc-update add  udev-postmount default
 rc-service --ifstopped udev start
 rc-service --ifstopped udev-trigger start
 rc-service --ifstopped udev-settle start
