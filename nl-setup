@@ -24,12 +24,12 @@ sudo cp backgrounds/* /usr/share/backgrounds/
 echo "## Ativando e Configurando o LightDM"
 sleep 1
 rc-update add lightdm
-sudo cp "/usr/share/backgrounds/$LightDMBack" /usr/share/pixmaps
-sudo mv "/usr/share/pixmaps/$LightDMBack" "/usr/share/pixmaps/background.png"
-sudo sed -i 's|^#\(background=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
-sudo sed -i 's|^background=.*|background=/usr/share/pixmaps/background.png|' /etc/lightdm/lightdm-gtk-greeter.conf
-sudo sed -i 's|^#\(icon-theme-name=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
-sudo sed -i 's|^icon-theme-name=.*|icon-theme-name=Papirus-Dark|' /etc/lightdm/lightdm-gtk-greeter.conf
+cp "/usr/share/backgrounds/$LightDMBack" /usr/share/pixmaps
+mv "/usr/share/pixmaps/$LightDMBack" "/usr/share/pixmaps/background.png"
+sed -i 's|^#\(background=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+sed -i 's|^background=.*|background=/usr/share/pixmaps/background.png|' /etc/lightdm/lightdm-gtk-greeter.conf
+sed -i 's|^#\(icon-theme-name=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+sed -i 's|^icon-theme-name=.*|icon-theme-name=Papirus-Dark|' /etc/lightdm/lightdm-gtk-greeter.conf
 
 
 echo "## Ativando o Dbus"
