@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
 setup-apkrepos -c -f
+setup-desktop xfce
