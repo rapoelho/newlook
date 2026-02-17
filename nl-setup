@@ -104,7 +104,7 @@ configUsers () {
 	fi
 }
 
-reboot {
+rebootNL () {
 	for sec in `seq 5 -1 1`; do
 			echo "## Reiniciando em $sec segundos"
 			sleep 1
@@ -121,3 +121,4 @@ doConfigs
 configLightDM
 enableServices
 configUsers
+rebootNL
