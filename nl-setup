@@ -45,7 +45,7 @@ enableUdev () {
 }
 
 installXFCE () {
-	echo "## Instalando o Desktop"
+	echo "## Instalando o Desktop Básico"
 	sleep 1
 	apk add xfce4 firefox elogind gvfs lightdm lightdm-gtk-greeter polkit-elogind xfce4-screensaver xfce4-terminal font-dejavu
 }
@@ -54,7 +54,7 @@ installApps ()
 {
 	echo "## Instalando outros Programas"
 	sleep 1
-	apk add fastfetch alacritty flatpak mpv ristretto geany xarchiver htop conky xfce4-power-manager xdg-user-dirs pulseaudio network-manager-applet cups sane zathura thunar-volman thunar-media-tags-plugin thunar-archive-plugin networkmanager acpi xfce-polkit unzip zip conky papirus-icon-theme udisks2 blueman bluez xfce4-pulseaudio-plugin pavucontrol xfce4-screenshooter gtk-murrine-engine sound-theme-freedesktop pulseaudio-utils xfce4-notifyd xclip brightnessctl tlp
+	apk add fastfetch alacritty flatpak mpv ristretto geany xarchiver htop conky xfce4-power-manager xdg-user-dirs pulseaudio network-manager-applet cups sane zathura thunar-volman thunar-media-tags-plugin thunar-archive-plugin networkmanager acpi xfce-polkit unzip zip conky papirus-icon-theme udisks2 blueman bluez xfce4-pulseaudio-plugin pavucontrol xfce4-screenshooter gtk-murrine-engine sound-theme-freedesktop pulseaudio-utils xfce4-notifyd xclip brightnessctl tlp pulseaudio-bluez
 }
 
 doConfigs () {
@@ -91,7 +91,9 @@ enableServices () {
 	rc-update add tlp
 	
 	echo "## Ativando o Bluetoot"
+	modprobe btusb
 	rc-update add bluetooth
+		
 }
 
 configUsers () {
@@ -99,7 +101,7 @@ configUsers () {
 	if [ $# -eq 0 ]; then
 		users=$(awk -F: '{if ($3<65000 && $3 >= 1000) print $1}' "$ROOT"/etc/passwd 2>/dev/null)
 		if [ -z "$users" ]; then
-			setup-user -g "audio,video,netdev" ## Verificar o Script completo e colocar a configuração dos Usuários aqui
+			setup-user -g "audio,video,netdev,lp" ## Verificar o Script completo e colocar a configuração dos Usuários aqui
 		fi
 	fi
 }
