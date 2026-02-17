@@ -4,72 +4,120 @@ set -e
 ## VARIABLES
 LightDMBack="Autumn Countryside Landscape.png"
 
-echo "## Ativando o Repositório Comunitário"
-setup-apkrepos -o
+communityRepo() {
+	echo "## Ativando o Repositório Comunitário"
+	setup-apkrepos -o ## Verificar o Script completo e colocar a configuração do Repositório aqui
+}
 
-echo "## Instalando o Xorg"
-sleep 1
-apk add xorg-server xf86-input-libinput xinit eudev mesa-dri-gallium
+installXorg (){
+	echo "## Instalando o Xorg"
+	sleep 1
+	apk add xorg-server xf86-input-libinput xinit eudev mesa-dri-gallium
+}
 
-echo "## Habilitando udev"
+enableUdev () {
+	echo "## Habilitando udev"
+	
+	if rc-service --exists mdevd ; then
+		rc-service --ifstarted --quiet hwdrivers stop
+		rc-service --ifstarted --quiet mdevd stop
+		rc-update delete  hwdrivers sysinit || :
+		rc-update delete  mdevd-init sysinit 2>/dev/null || :
+		rc-update delete  mdevd sysinit 2>/dev/null || :
+	fi
+	
+	if rc-service --exists mdev ; then
+		rc-service --ifstarted --quiet hwdrivers stop
+		rc-service --ifstarted --quiet mdev stop
+		rc-update delete hwdrivers sysinit || :
+		rc-update delete mdev sysinit || :
+	fi
+	
+	apk add --quiet eudev udev-init-scripts udev-init-scripts-openrc
+	rc-update add  udev sysinit
+	rc-update add  udev-trigger sysinit
+	rc-update add  udev-settle sysinit
+	rc-update add  udev-postmount default
+	rc-service --ifstopped udev start
+	rc-service --ifstopped udev-trigger start
+	rc-service --ifstopped udev-settle start
+	rc-service --ifstopped udev-postmount start
+}
 
-if rc-service --exists mdevd ; then
-	rc-service --ifstarted --quiet hwdrivers stop
-	rc-service --ifstarted --quiet mdevd stop
-	rc-update delete  hwdrivers sysinit || :
-	rc-update delete  mdevd-init sysinit 2>/dev/null || :
-	rc-update delete  mdevd sysinit 2>/dev/null || :
-fi
+installXFCE () {
+	echo "## Instalando o Desktop"
+	sleep 1
+	apk add xfce4 firefox elogind gvfs lightdm lightdm-gtk-greeter polkit-elogind xfce4-screensaver xfce4-terminal font-dejavu
+}
 
-if rc-service --exists mdev ; then
-	rc-service --ifstarted --quiet hwdrivers stop
-	rc-service --ifstarted --quiet mdev stop
-	rc-update delete hwdrivers sysinit || :
-	rc-update delete mdev sysinit || :
-fi
+installApps () 
+{
+	echo "## Instalando outros Programas"
+	sleep 1
+	apk add fastfetch alacritty flatpak mpv ristretto geany xarchiver htop conky xfce4-power-manager xdg-user-dirs pulseaudio network-manager-applet cups sane zathura thunar-volman thunar-media-tags-plugin thunar-archive-plugin networkmanager acpi xfce-polkit unzip zip conky papirus-icon-theme udisks2 blueman bluez xfce4-pulseaudio-plugin pavucontrol xfce4-screenshooter gtk-murrine-engine sound-theme-freedesktop pulseaudio-utils xfce4-notifyd xclip brightnessctl tlp
+}
 
-apk add --quiet eudev udev-init-scripts udev-init-scripts-openrc
-rc-update add  udev sysinit
-rc-update add  udev-trigger sysinit
-rc-update add  udev-settle sysinit
-rc-update add  udev-postmount default
-rc-service --ifstopped udev start
-rc-service --ifstopped udev-trigger start
-rc-service --ifstopped udev-settle start
-rc-service --ifstopped udev-postmount start
+doConfigs () {
+	sleep 1
+	echo "## Copiando Wallpapers"
+	cp backgrounds/* /usr/share/backgrounds/
+}
 
-echo "## Instalando o Desktop"
-sleep 1
-apk add xfce4 firefox elogind gvfs lightdm lightdm-gtk-greeter polkit-elogind xfce4-screensaver xfce4-terminal font-dejavu
-
-echo "## Instalando outros Programas"
-sleep 1
-apk add fastfetch alacritty flatpak mpv ristretto geany xarchiver htop conky xfce4-power-manager xdg-user-dirs pulseaudio network-manager-applet cups sane zathura thunar-volman thunar-media-tags-plugin thunar-archive-plugin networkmanager acpi xfce-polkit unzip zip conky papirus-icon-theme udisks2 blueman bluez xfce4-pulseaudio-plugin pavucontrol xfce4-screenshooter gtk-murrine-engine sound-theme-freedesktop pulseaudio-utils xfce4-notifyd xclip brightnessctl tlp
-
-echo "## Copiando Wallpapers"
-cp backgrounds/* /usr/share/backgrounds/
-
-echo "## Ativando e Configurando o LightDM"
-sleep 1
-rc-update add lightdm
-cp "/usr/share/backgrounds/$LightDMBack" /usr/share/pixmaps
-mv "/usr/share/pixmaps/$LightDMBack" "/usr/share/pixmaps/background.png"
-sed -i 's|^#\(background=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
-sed -i 's|^background=.*|background=/usr/share/pixmaps/background.png|' /etc/lightdm/lightdm-gtk-greeter.conf
-sed -i 's|^#\(icon-theme-name=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
-sed -i 's|^icon-theme-name=.*|icon-theme-name=Papirus-Dark|' /etc/lightdm/lightdm-gtk-greeter.conf
+configLightDM (){
+	echo "## Configurando o LightDM"
+	sleep 1
+	cp "/usr/share/backgrounds/$LightDMBack" /usr/share/pixmaps
+	mv "/usr/share/pixmaps/$LightDMBack" "/usr/share/pixmaps/background.png"
+	sed -i 's|^#\(background=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+	sed -i 's|^background=.*|background=/usr/share/pixmaps/background.png|' /etc/lightdm/lightdm-gtk-greeter.conf
+	sed -i 's|^#\(icon-theme-name=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+	sed -i 's|^icon-theme-name=.*|icon-theme-name=Papirus-Dark|' /etc/lightdm/lightdm-gtk-greeter.conf
+}
 
 
-echo "## Ativando o Dbus"
-rc-update add dbus
+enableServices () {
+	sleep 1
+	
+	echo "## Ativando o LightDM"
+	rc-update add lightdm
+	
+	echo "## Ativando o Dbus"
+	rc-update add dbus
+	
+	echo "## Ativando o Network Manager"
+	rc-update add networkmanager
+	
+	echo "## Ativando o TLP"
+	rc-update add tlp
+	
+	echo "## Ativando o Bluetoot"
+	rc-update add bluetooth
+}
 
-echo "## Ativando o Network Manager"
-rc-update add networkmanager
+configUsers () {
+	echo "## Configurando Usuários"
+	if [ $# -eq 0 ]; then
+		users=$(awk -F: '{if ($3<65000 && $3 >= 1000) print $1}' "$ROOT"/etc/passwd 2>/dev/null)
+		if [ -z "$users" ]; then
+			setup-user -g "audio,video,netdev" ## Verificar o Script completo e colocar a configuração dos Usuários aqui
+		fi
+	fi
+}
 
-echo "## Ativando o TLP"
-rc-update add tlp
+reboot {
+	for sec in `seq 5 -1 1`; do
+			echo "## Reiniciando em $sec segundos"
+			sleep 1
+	done
+	reboot
+}
 
-for sec in `seq 5 -1 1`; do
-		echo "## Reiniciando em $sec segundos"
-		sleep 1
-done
+communityRepo
+installXorg
+enableUdev
+installXFCE
+installApps
+doConfigs
+configLightDM
+enableServices
+configUsers
