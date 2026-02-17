@@ -19,7 +19,7 @@ sleep
 apk add fastfetch alacritty flatpak mpv ristretto geany xarchiver htop conky xfce4-power-manager xdg-user-dirs pulseaudio network-manager-applet cups sane zathura thunar-volman thunar-media-tags-plugin thunar-archive-plugin networkmanager acpi xfce-polkit unzip zip conky papirus-icon-theme udisks2 blueman bluez xfce4-pulseaudio-plugin pavucontrol xfce4-screenshooter gtk-murrine-engine sound-theme-freedesktop pulseaudio-utils xfce4-notifyd xclip brightnessctl tlp
 
 echo "## Copiando Wallpapers"
-sudo cp backgrounds/* /usr/share/backgrounds/
+cp backgrounds/* /usr/share/backgrounds/
 
 echo "## Ativando e Configurando o LightDM"
 sleep 1
