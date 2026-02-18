@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+## Copyright (C) 2020-2024 Aditya Shakya <adi1090x@gmail.com>
+## Modificado por Rapoelho, para incluir a opção desse Script ser um Pipemenu e para uso no Nippybox
+## Script to take screenshots on Archcraft.
+
+# file
+time=$(date +%Y-%m-%d-%H-%M-%S)
+geometry=`xrandr | grep 'current' | head -n1 | cut -d',' -f2 | tr -d '[:blank:],current'`
+dir="`xdg-user-dir PICTURES`/Screenshots"
+file="Screenshot_${time}_${geometry}.png"
+
+# directory
+if [[ ! -d "$dir" ]]; then
+	mkdir -p "$dir"
+fi
+
+# notify and view screenshot
+notify_view () {
+	notify_cmd_shot='notify-send'
+	paplay /usr/share/sounds/freedesktop/stereo/screen-capture.oga &>/dev/null &
+	${notify_cmd_shot} "Screenshot Saved."
+}
+
+# copy screenshot to clipboard
+copy_shot () {
+	tee "$file" | xclip -selection clipboard -t image/png
+}
+
+# countdown
+countdown () {
+	for sec in `seq $1 -1 1`; do
+		notify-send -r 999 "Taking shot in : $sec"
+		sleep 1
+	done
+}
+
+# take shots
+shotnow () {
+	cd ${dir} && xfce4-screenshooter -f -m -s $file | copy_shot
+	notify_view
+}
+
+shot5 () {
+	countdown '5'
+	sleep 1 && cd ${dir} && xfce4-screenshooter -f -m -s $file | copy_shot
+	notify_view
+}
+
+shot10 () {
+	countdown '10'
+	sleep 1 && cd ${dir} && xfce4-screenshooter -f -m -s $file | copy_shot
+	notify_view
+}
+
+shotwin () {
+	cd ${dir} && xfce4-screenshooter -w -m -s $file | copy_shot
+	notify_view
+}
+
+shotarea () {
+	cd ${dir} && xfce4-screenshooter -r -m -s $file | copy_shot
+	notify_view
+}
+
+# execute
+if [[ "$1" == "--now" ]]; then
+	shotnow
+elif [[ "$1" == "--in5" ]]; then
+	shot5
+elif [[ "$1" == "--in10" ]]; then
+	shot10
+elif [[ "$1" == "--win" ]]; then
+	shotwin
+elif [[ "$1" == "--area" ]]; then
+	shotarea
+else
+	echo -e "Available Options : --now --in5 --in10 --win --area"
+fi
+
+exit 0

@@ -47,20 +47,47 @@ enableUdev () {
 installXFCE () {
 	echo "## Instalando o Desktop Básico"
 	sleep 1
-	apk add xfce4 firefox elogind gvfs lightdm lightdm-gtk-greeter polkit-elogind xfce4-screensaver xfce4-terminal font-dejavu
+	apk add xfce4 firefox elogind gvfs lightdm lightdm-gtk-greeter polkit-elogind xfce4-screensaver xfce4-terminal font-dejavu sound-theme-freedesktop 
 }
 
-installApps () 
-{
-	echo "## Instalando outros Programas"
+installApps () {
+	echo "## Instalando Pacotes Extras do XFCE"
 	sleep 1
-	apk add fastfetch alacritty flatpak mpv ristretto geany xarchiver htop conky xfce4-power-manager xdg-user-dirs pulseaudio network-manager-applet cups sane zathura thunar-volman thunar-media-tags-plugin thunar-archive-plugin networkmanager acpi xfce-polkit unzip zip conky papirus-icon-theme udisks2 blueman bluez xfce4-pulseaudio-plugin pavucontrol xfce4-screenshooter gtk-murrine-engine sound-theme-freedesktop pulseaudio-utils xfce4-notifyd xclip brightnessctl tlp pulseaudio-bluez
+	apk add xfce4-power-manager xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-notifyd network-manager-applet papirus-icon-theme gtk-murrine-engine
+	
+	echo "## Instalando Programas"
+	sleep 1
+	apk add fastfetch alacritty mpv ristretto geany xarchiver htop conky zathura unzip zip conky
+	
+	echo "## Instalando Suporte ao Scanner e Impressoras"
+	sleep
+	apk add cups sane 
+	
+	echo "## Instalando Componentes do Desktop"
+	sleep 1
+	apk add xdg-user-dirs pulseaudio alsa-plugins-pulse networkmanager acpi xfce-polkit udisks2 blueman bluez  pulseaudio-bluez pavucontrol tlp 
+	
+	echo "## Instalando Dependências dos Scripts"
+	sleep 1
+	apk add pulseaudio-utils xclip brightnessctl ffmpeg
+	
+	echo "## Instalando Pacotes Extras do Thunar"
+	sleep
+	apk add thunar-volman thunar-media-tags-plugin thunar-archive-plugin
+	
+	echo "## Instalando o Suporte a Flatpaks"
+	sleep
+	apk add flatpak
 }
 
 doConfigs () {
 	sleep 1
 	echo "## Copiando Wallpapers"
-	cp backgrounds/* /usr/share/backgrounds/
+	cp backgrounds/* /usr/share/backgrounds
+	
+	echo "## Copiando Scripts"
+	chmod +x scripts/*
+	cp scripts/* /usr/local/bin
 }
 
 configLightDM (){
@@ -92,8 +119,7 @@ enableServices () {
 	
 	echo "## Ativando o Bluetoot"
 	modprobe btusb
-	rc-update add bluetooth
-		
+	rc-update add bluetooth		
 }
 
 configUsers () {
