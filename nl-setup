@@ -150,6 +150,7 @@ communityRepo
 installXorg
 enableUdev
 installXFCE
+installFonts
 installApps
 doConfigs
 configLightDM
