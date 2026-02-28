@@ -80,6 +80,12 @@ installApps () {
 	apk add flatpak
 }
 
+installFonts () {
+	echo -e "\n## Instalando as Fontes..."
+	sudo cp fonts/* /usr/share/fonts
+	sudo fc-cache -fv
+}
+
 doConfigs () {
 	sleep 1
 	echo "## Copiando Wallpapers"
