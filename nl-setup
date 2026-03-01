@@ -104,10 +104,10 @@ doConfigs () {
 	cp scripts/* /usr/local/bin
 	
 	echo "## Copiando Configurações"
-	cp -r configs/* /etc/skel/.config
+	cp -r config/* /etc/skel/.config
 	
 	for d in /home/*; do 
-		cp -r configs/* /home/"$d"/.config
+		cp -r config/* /home/"$d"/.config
 	done
 	
 	echo "## Instalando Temas..."
