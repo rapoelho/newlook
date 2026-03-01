@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -e
+
+## VARIABLES
+LightDMBack="Autumn Countryside Landscape.png"
+
+checkFolders () {
+	echo -e "\n## Verificando Diretórios..."
+	mkdir -p /etc/skel/.config
+	for d in /home/*; do 
+		mkdir "$d"/.config
+	done
+}
+
+installFonts () {
+	echo -e "\n## Instalando as Fontes..."
+	cp fonts/* /usr/share/fonts
+	fc-cache -fv
+}
+
+doConfigs () {
+	sleep 1
+	echo "## Copiando Wallpapers"
+	cp backgrounds/* /usr/share/backgrounds
+	
+	echo "## Copiando Scripts"
+	chmod +x scripts/*
+	cp scripts/* /usr/local/bin
+	
+	echo "## Copiando Configurações"
+	cp -r config/* /etc/skel/.config
+	
+	for d in /home/*; do 
+		cp -r config/* "$d"/.config
+	done
+	
+	echo "## Instalando Temas..."
+	tar -xzvf themes.tar.gz
+	cp -r themes/* /usr/share/themes/
+}
+
+configLightDM (){
+	echo "## Configurando o LightDM"
+	sleep 1
+	cp "/usr/share/backgrounds/$LightDMBack" /usr/share/pixmaps
+	mv "/usr/share/pixmaps/$LightDMBack" "/usr/share/pixmaps/background.png"
+	sed -i 's|^#\(background=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+	sed -i 's|^background=.*|background=/usr/share/pixmaps/background.png|' /etc/lightdm/lightdm-gtk-greeter.conf
+	sed -i 's|^#\(icon-theme-name=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+	sed -i 's|^icon-theme-name=.*|icon-theme-name=Papirus-Dark|' /etc/lightdm/lightdm-gtk-greeter.conf
+}
+
+
+rebootNL () {
+	for sec in `seq 5 -1 1`; do
+			echo "## Reiniciando em $sec segundos"
+			sleep 1
+	done
+	reboot
+}
+
+checkFolders
+installFonts
+doConfigs
+configLightDM
+rebootNL

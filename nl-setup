@@ -1,0 +1,177 @@
+#!/usr/bin/env bash
+set -e
+
+source nl-xfce
+
+checkFolders () {
+	echo -e "\n## Verificando Diretórios..."
+	mkdir -p /etc/skel/.config
+	for d in /home/*; do 
+		mkdir "$d"/.config
+	done
+}
+
+communityRepo() {
+	echo "## Ativando o Repositório Comunitário"
+	setup-apkrepos -o ## Verificar o Script completo e colocar a configuração do Repositório aqui
+}
+
+installXorg (){
+	echo "## Instalando o Xorg"
+	sleep 1
+	apk add xorg-server xf86-input-libinput xinit eudev mesa-dri-gallium
+}
+
+enableUdev () {
+	echo "## Habilitando udev"
+	
+	if rc-service --exists mdevd ; then
+		rc-service --ifstarted --quiet hwdrivers stop
+		rc-service --ifstarted --quiet mdevd stop
+		rc-update delete  hwdrivers sysinit || :
+		rc-update delete  mdevd-init sysinit 2>/dev/null || :
+		rc-update delete  mdevd sysinit 2>/dev/null || :
+	fi
+	
+	if rc-service --exists mdev ; then
+		rc-service --ifstarted --quiet hwdrivers stop
+		rc-service --ifstarted --quiet mdev stop
+		rc-update delete hwdrivers sysinit || :
+		rc-update delete mdev sysinit || :
+	fi
+	
+	apk add --quiet eudev udev-init-scripts udev-init-scripts-openrc
+	rc-update add  udev sysinit
+	rc-update add  udev-trigger sysinit
+	rc-update add  udev-settle sysinit
+	rc-update add  udev-postmount default
+	rc-service --ifstopped udev start
+	rc-service --ifstopped udev-trigger start
+	rc-service --ifstopped udev-settle start
+	rc-service --ifstopped udev-postmount start
+}
+
+installXFCE () {
+	echo "## Instalando o Desktop Básico"
+	sleep 1
+	apk add xfce4 firefox elogind gvfs lightdm lightdm-gtk-greeter polkit-elogind xfce4-screensaver xfce4-terminal font-dejavu sound-theme-freedesktop 
+}
+
+installApps () {
+	echo "## Instalando Pacotes Extras do XFCE"
+	sleep 1
+	apk add xfce4-power-manager xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-notifyd network-manager-applet papirus-icon-theme gtk-murrine-engine
+	
+	echo "## Instalando Programas"
+	sleep 1
+	apk add fastfetch alacritty mpv ristretto geany xarchiver htop conky zathura unzip zip conky
+	
+	echo "## Instalando Suporte ao Scanner e Impressoras"
+	sleep 1
+	apk add cups sane 
+	
+	echo "## Instalando Componentes do Desktop"
+	sleep 1
+	apk add xdg-user-dirs pulseaudio alsa-plugins-pulse networkmanager networkmanager-wifi acpi xfce-polkit udisks2 blueman bluez  pulseaudio-bluez pavucontrol tlp 
+	
+	echo "## Instalando Dependências dos Scripts"
+	sleep 1
+	apk add pulseaudio-utils xclip brightnessctl ffmpeg
+	
+	echo "## Instalando Pacotes Extras do Thunar"
+	sleep 1
+	apk add thunar-volman thunar-media-tags-plugin thunar-archive-plugin
+	
+	echo "## Instalando o Suporte a Flatpaks"
+	sleep 1
+	apk add flatpak
+}
+
+#~ installFonts () {
+	#~ echo -e "\n## Instalando as Fontes..."
+	#~ cp fonts/* /usr/share/fonts
+	#~ fc-cache -fv
+#~ }
+
+#~ doConfigs () {
+	#~ sleep 1
+	#~ echo "## Copiando Wallpapers"
+	#~ cp backgrounds/* /usr/share/backgrounds
+	
+	#~ echo "## Copiando Scripts"
+	#~ chmod +x scripts/*
+	#~ cp scripts/* /usr/local/bin
+	
+	#~ echo "## Copiando Configurações"
+	#~ cp -r config/* /etc/skel/.config
+	
+	#~ for d in /home/*; do 
+		#~ cp -r config/* "$d"/.config
+	#~ done
+	
+	#~ echo "## Instalando Temas..."
+	#~ tar -xzvf themes.tar.gz
+	#~ cp -r themes/* /usr/share/themes/
+#~ }
+
+#~ configLightDM (){
+	#~ echo "## Configurando o LightDM"
+	#~ sleep 1
+	#~ cp "/usr/share/backgrounds/$LightDMBack" /usr/share/pixmaps
+	#~ mv "/usr/share/pixmaps/$LightDMBack" "/usr/share/pixmaps/background.png"
+	#~ sed -i 's|^#\(background=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+	#~ sed -i 's|^background=.*|background=/usr/share/pixmaps/background.png|' /etc/lightdm/lightdm-gtk-greeter.conf
+	#~ sed -i 's|^#\(icon-theme-name=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+	#~ sed -i 's|^icon-theme-name=.*|icon-theme-name=Papirus-Dark|' /etc/lightdm/lightdm-gtk-greeter.conf
+#~ }
+
+
+enableServices () {
+	sleep 1
+	
+	echo "## Ativando o LightDM"
+	rc-update add lightdm
+	
+	echo "## Ativando o Dbus"
+	rc-update add dbus
+	
+	echo "## Ativando o Network Manager"
+	rc-update add networkmanager
+	
+	echo "## Ativando o TLP"
+	rc-update add tlp
+	
+	echo "## Ativando o Bluetooth"
+	modprobe btusb
+	rc-update add bluetooth		
+}
+
+configUsers () {
+	echo "## Configurando Usuários"
+	if [ $# -eq 0 ]; then
+		users=$(awk -F: '{if ($3<65000 && $3 >= 1000) print $1}' "$ROOT"/etc/passwd 2>/dev/null)
+		if [ -z "$users" ]; then
+			setup-user -g "audio,video,netdev,lp,plugdev" ## Verificar o Script completo e colocar a configuração dos Usuários aqui
+		fi
+	fi
+}
+
+#~ rebootNL () {
+	#~ for sec in `seq 5 -1 1`; do
+			#~ echo "## Reiniciando em $sec segundos"
+			#~ sleep 1
+	#~ done
+	#~ reboot
+#~ }
+
+communityRepo
+installXorg
+enableUdev
+installXFCE
+installFonts
+installApps
+doConfigs
+configLightDM
+enableServices
+configUsers
+rebootNL
