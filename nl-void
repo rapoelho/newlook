@@ -9,7 +9,7 @@ source nl-xfce
 installXorg (){
 	echo "## Instalando o Xorg"
 	sleep 1
-	sudo xbps-install -y xorg-server xf86-input-libinput xinit #eudev mesa-dri-gallium
+	sudo xbps-install -y xorg-server xf86-input-libinput xinit mesa-libgallium mesa-dri
 }
 
 installXFCE () {
@@ -57,8 +57,18 @@ enableServices () {
 	echo "## Ativando o Dbus"
 	sudo ln -s /etc/sv/dbus /var/service/
 	
+	if [[ -f "/var/service/dhcpcd" ]]; then
+		echo "## Desativando o DHCPCD"
+		sudo rm /var/service/dhcpcd
+	fi
+	
+	if [[ -f "/var/service/wpa_supplicant" ]]; then
+		echo "## Desativando o WPA Supplicant"
+		sudo rm /var/service/wpa_supplicant
+	fi
+	
 	echo "## Ativando o Network Manager"
-	sudo ln -s /etc/sv/networkmanager /var/service/
+	sudo ln -s /etc/sv/NetworkManager /var/service/
 	
 	echo "## Ativando o TLP"
 	sudo ln -s /etc/sv/tlp /var/service/
@@ -75,9 +85,8 @@ rebootNL () {
 			echo "## Reiniciando em $sec segundos"
 			sleep 1
 	done
-	reboot
+	sudo reboot
 }
-
 
 installXorg
 installXFCE
@@ -87,5 +96,4 @@ doConfigs
 userConfigs
 configLightDM
 enableServices
-#~ configUsers
 rebootNL

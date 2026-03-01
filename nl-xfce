@@ -66,6 +66,7 @@ userConfigs () {
 			mkdir $HOME/.config
 	fi
 	cp -r config/* $HOME/.config
+	xfconf-query -c xsettings -p /Net/IconThemeName -s "Papirus-Dark"
 }
 
 configLightDM (){
