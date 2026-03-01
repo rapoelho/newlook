@@ -80,11 +80,11 @@ installApps () {
 	apk add pulseaudio-utils xclip brightnessctl ffmpeg
 	
 	echo "## Instalando Pacotes Extras do Thunar"
-	sleep
+	sleep 1
 	apk add thunar-volman thunar-media-tags-plugin thunar-archive-plugin
 	
 	echo "## Instalando o Suporte a Flatpaks"
-	sleep
+	sleep 1
 	apk add flatpak
 }
 
@@ -142,7 +142,7 @@ enableServices () {
 	echo "## Ativando o TLP"
 	rc-update add tlp
 	
-	echo "## Ativando o Bluetoot"
+	echo "## Ativando o Bluetooth"
 	modprobe btusb
 	rc-update add bluetooth		
 }
