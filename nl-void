@@ -9,43 +9,43 @@ source nl-xfce
 installXorg (){
 	echo "## Instalando o Xorg"
 	sleep 1
-	xbps-install -y xorg-server xf86-input-libinput xinit #eudev mesa-dri-gallium
+	sudo xbps-install -y xorg-server xf86-input-libinput xinit #eudev mesa-dri-gallium
 }
 
 installXFCE () {
 	echo "## Instalando o Desktop Básico"
 	sleep 1
-	xbps-install -y xfce4-appfinder xfce4-panel xfce4-session xfce4-settings xfconf xfdesktop xfwm4 xfce4-terminal Thunar exo xfce4-screensaver elogind gvfs lightdm lightdm-gtk-greeter xfce4-screensaver xfce4-terminal sound-theme-freedesktop 
+	sudo xbps-install -y xfce4-appfinder xfce4-panel xfce4-session xfce4-settings xfconf xfdesktop xfwm4 xfce4-terminal Thunar exo xfce4-screensaver elogind gvfs lightdm lightdm-gtk-greeter xfce4-screensaver xfce4-terminal sound-theme-freedesktop 
 }
 
 installApps () {
 	echo "## Instalando Pacotes Extras do XFCE"
 	sleep 1
-	xbps-install -y xfce4-power-manager xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-notifyd network-manager-applet papirus-icon-theme gtk-engine-murrine
+	sudo xbps-install -y xfce4-power-manager xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-notifyd network-manager-applet papirus-icon-theme gtk-engine-murrine
 	
 	echo "## Instalando Programas"
 	sleep 1
-	xbps-install -y firefox fastfetch alacritty mpv ristretto geany xarchiver htop conky unzip zip
+	sudo xbps-install -y firefox fastfetch alacritty mpv ristretto geany xarchiver htop conky unzip zip
 	
 	echo "## Instalando Suporte ao Scanner e Impressoras"
 	sleep 1
-	xbps-install -y cups sane 
+	sudo xbps-install -y cups sane 
 	
 	echo "## Instalando Componentes do Desktop"
 	sleep 1
-	xbps-install -y xdg-user-dirs-gtk pulseaudio alsa-plugins-pulseaudio NetworkManager acpi xfce-polkit udisks2 blueman bluez pavucontrol tlp upower
+	sudo xbps-install -y xdg-user-dirs-gtk pulseaudio alsa-plugins-pulseaudio NetworkManager acpi xfce-polkit udisks2 blueman bluez pavucontrol tlp upower
 	
 	echo "## Instalando Dependências dos Scripts"
 	sleep 1
-	xbps-install -y pulseaudio-utils xclip brightnessctl ffmpeg clipnotify
+	sudo xbps-install -y pulseaudio-utils xclip brightnessctl ffmpeg clipnotify
 	
 	echo "## Instalando Pacotes Extras do Thunar"
 	sleep 1
-	xbps-install -y thunar-volman tumbler thunar-media-tags-plugin thunar-archive-plugin
+	sudo xbps-install -y thunar-volman tumbler thunar-media-tags-plugin thunar-archive-plugin
 	
 	echo "## Instalando o Suporte a Flatpaks"
 	sleep 1
-	xbps-install -y flatpak
+	sudo xbps-install -y flatpak
 }
 
 enableServices () {
@@ -70,16 +70,6 @@ enableServices () {
 	sudo ln -s /etc/sv/cupsd /var/service/
 }
 
-#~ configUsers () {
-	#~ echo "## Configurando Usuários"
-	#~ if [ $# -eq 0 ]; then
-		#~ users=$(awk -F: '{if ($3<65000 && $3 >= 1000) print $1}' "$ROOT"/etc/passwd 2>/dev/null)
-		#~ if [ -z "$users" ]; then
-			#~ setup-user -g "audio,video,netdev,lp,plugdev" ## Verificar o Script completo e colocar a configuração dos Usuários aqui
-		#~ fi
-	#~ fi
-#~ }
-
 rebootNL () {
 	for sec in `seq 5 -1 1`; do
 			echo "## Reiniciando em $sec segundos"
@@ -88,11 +78,13 @@ rebootNL () {
 	reboot
 }
 
+sudo checkFolders
 installXorg
 installXFCE
 installFonts
 installApps
 doConfigs
+userConfigs
 configLightDM
 enableServices
 #~ configUsers

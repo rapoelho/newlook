@@ -120,6 +120,7 @@ rebootNL () {
 	reboot
 }
 
+checkFolders
 communityRepo
 installXorg
 enableUdev
@@ -127,6 +128,7 @@ installXFCE
 installFonts
 installApps
 doConfigs
+sysConfigs
 configLightDM
 enableServices
 configUsers

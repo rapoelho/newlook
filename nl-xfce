@@ -14,12 +14,6 @@ checkFolders () {
 	if ! [ -d /etc/skel/.config ]; then
 		mkdir -p /etc/skel/.config
 	fi
-		
-	for d in /home/*; do 
-		if ! [ -d  "$d"/.config ]; then
-			mkdir "$d"/.config
-		fi
-	done
 }
 
 installFonts () {
@@ -39,14 +33,30 @@ doConfigs () {
 	
 	echo "## Copiando Configurações"
 	cp -r config/* /etc/skel/.config
-	
-	for d in /home/*; do 
-		cp -r config/* "$d"/.config
-	done
-	
+		
 	echo "## Instalando Temas..."
 	tar -xzvf themes.tar.gz
 	cp -r themes/* /usr/share/themes/
+}
+
+sysConfigs () {
+	echo "## Copiando Configurações nas Pastas dos Usuários"
+	for d in /home/*; do 
+		if ! [ -d  "$d"/.config ]; then
+			mkdir "$d"/.config
+		fi
+		
+		cp -r config/* "$d"/.config		
+	done
+
+}
+
+userConfigs () {
+	echo "## Copiando Configurações para a Pasta do Usuário"
+	if ! [ -d  $HOME/.config ]; then
+			mkdir $HOME/.config
+	fi
+	cp -r config/* $HOME/.config
 }
 
 configLightDM (){
@@ -59,7 +69,3 @@ configLightDM (){
 	sed -i 's|^#\(icon-theme-name=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
 	sed -i 's|^icon-theme-name=.*|icon-theme-name=Papirus-Dark|' /etc/lightdm/lightdm-gtk-greeter.conf
 }
-
-
-checkFolders
-
