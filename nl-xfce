@@ -4,51 +4,60 @@ set -e
 ## VARIABLES
 LightDMBack="Autumn Countryside Landscape.png"
 
+superCmd () {
+	if ! [ "$(id -u)" == "0" ]; then
+		if ! [ -z "$(command -v sudo)" ]; then
+			superUser="sudo"
+		elif ! [ -z "$(command -v doas)" ]; then
+			superUser="doas"
+		fi
+	fi
+}
+
 checkFolders () {
 	echo -e "\n## Verificando Diretórios..."
 	
 	if ! [ -d /usr/share/fonts ]; then
-		mkdir -p /usr/share/fonts
+		${superUser} mkdir -p /usr/share/fonts
 	fi
 	
 	if ! [ -d /etc/skel/.config ]; then
-		mkdir -p /etc/skel/.config
+		${superUser} mkdir -p /etc/skel/.config
 	fi
 }
 
 installFonts () {
 	echo -e "\n## Instalando as Fontes..."
-	cp fonts/* /usr/share/fonts
-	fc-cache -fv
+	${superUser} cp fonts/* /usr/share/fonts
+	${superUser} fc-cache -fv
 }
 
 doConfigs () {
 	sleep 1
 	echo "## Copiando Wallpapers"
-	cp backgrounds/* /usr/share/backgrounds
+	${superUser} cp backgrounds/* /usr/share/backgrounds
 	
 	echo "## Copiando Scripts"
 	chmod +x scripts/*
-	cp scripts/* /usr/local/bin
+	${superUser} cp scripts/* /usr/local/bin
 	
 	echo "## Copiando Configurações"
-	cp -r config/* /etc/skel/.config
+	${superUser} cp -r config/* /etc/skel/.config
 		
 	echo "## Instalando Temas..."
 	tar -xzvf themes.tar.gz
-	cp -r themes/* /usr/share/themes/
+	${superUser} cp -r themes/* /usr/share/themes/
 }
 
 sysConfigs () {
 	echo "## Copiando Configurações nas Pastas dos Usuários"
 	for d in /home/*; do 
 		if ! [ -d  "$d"/.config ]; then
-			mkdir "$d"/.config
+			${superUser} mkdir "$d"/.config
 		fi
 		
-		cp -r config/* "$d"/.config		
+		${superUser} cp -r config/* "$d"/.config		
 	done
-
 }
 
 userConfigs () {
@@ -62,10 +71,13 @@ userConfigs () {
 configLightDM (){
 	echo "## Configurando o LightDM"
 	sleep 1
-	cp "/usr/share/backgrounds/$LightDMBack" /usr/share/pixmaps
-	mv "/usr/share/pixmaps/$LightDMBack" "/usr/share/pixmaps/background.png"
-	sed -i 's|^#\(background=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
-	sed -i 's|^background=.*|background=/usr/share/pixmaps/background.png|' /etc/lightdm/lightdm-gtk-greeter.conf
-	sed -i 's|^#\(icon-theme-name=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
-	sed -i 's|^icon-theme-name=.*|icon-theme-name=Papirus-Dark|' /etc/lightdm/lightdm-gtk-greeter.conf
+	${superUser} cp "/usr/share/backgrounds/$LightDMBack" /usr/share/pixmaps
+	${superUser} mv "/usr/share/pixmaps/$LightDMBack" "/usr/share/pixmaps/background.png"
+	${superUser} sed -i 's|^#\(background=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+	${superUser} sed -i 's|^background=.*|background=/usr/share/pixmaps/background.png|' /etc/lightdm/lightdm-gtk-greeter.conf
+	${superUser} sed -i 's|^#\(icon-theme-name=.*\)|\1|' /etc/lightdm/lightdm-gtk-greeter.conf
+	${superUser} sed -i 's|^icon-theme-name=.*|icon-theme-name=Papirus-Dark|' /etc/lightdm/lightdm-gtk-greeter.conf
 }
+
+superCmd
+checkFolders

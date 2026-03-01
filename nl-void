@@ -78,7 +78,7 @@ rebootNL () {
 	reboot
 }
 
-sudo checkFolders
+
 installXorg
 installXFCE
 installFonts
