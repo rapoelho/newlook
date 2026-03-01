@@ -8,7 +8,7 @@ checkFolders () {
 	echo -e "\n## Verificando Diretórios..."
 	mkdir -p /etc/skel/.config
 	for d in /home/*; do 
-		mkdir /home/"$d"/.config
+		mkdir "$d"/.config
 	done
 }
 
@@ -107,11 +107,11 @@ doConfigs () {
 	cp -r config/* /etc/skel/.config
 	
 	for d in /home/*; do 
-		cp -r config/* /home/"$d"/.config
+		cp -r config/* "$d"/.config
 	done
 	
 	echo "## Instalando Temas..."
-	tar -czvf themes.tar.gz
+	tar -xzvf themes.tar.gz
 	cp -r themes/* /usr/share/themes/
 }
 
