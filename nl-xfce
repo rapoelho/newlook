@@ -51,16 +51,8 @@ configLightDM (){
 }
 
 
-rebootNL () {
-	for sec in `seq 5 -1 1`; do
-			echo "## Reiniciando em $sec segundos"
-			sleep 1
-	done
-	reboot
-}
-
-checkFolders
-installFonts
-doConfigs
-configLightDM
-rebootNL
+#~ checkFolders
+#~ installFonts
+#~ doConfigs
+#~ configLightDM
+#~ rebootNL
