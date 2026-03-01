@@ -6,9 +6,19 @@ LightDMBack="Autumn Countryside Landscape.png"
 
 checkFolders () {
 	echo -e "\n## Verificando Diretórios..."
-	mkdir -p /etc/skel/.config
+	
+	if ! [ -d /usr/share/fonts ]; then
+		mkdir -p /usr/shate/fonts
+	fi
+	
+	if ! [ -d /etc/skel/.config ]; then
+		mkdir -p /etc/skel/.config
+	fi
+		
 	for d in /home/*; do 
-		mkdir "$d"/.config
+		if ! [ -d  "$d"/.config ]; then
+			mkdir "$d"/.config
+		fi
 	done
 }
 
