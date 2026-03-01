@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+set -e
+
+## VARIABLES
+LightDMBack="Autumn Countryside Landscape.png"
+
+source nl-xfce
+
+installXorg (){
+	echo "## Instalando o Xorg"
+	sleep 1
+	xbps-install xorg-server xf86-input-libinput xinit #eudev mesa-dri-gallium
+}
+
+installXFCE () {
+	echo "## Instalando o Desktop Básico"
+	sleep 1
+	xbps-install xfce4-appfinder xfce4-panel xfce4-session xfce4-settings xfconf xfdesktop xfwm4 xfce4-terminal Thunar exo xfce4-screensaver elogind gvfs lightdm lightdm-gtk-greeter xfce4-screensaver xfce4-terminal sound-theme-freedesktop 
+}
+
+installApps () {
+	echo "## Instalando Pacotes Extras do XFCE"
+	sleep 1
+	xbps-install xfce4-power-manager xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-notifyd network-manager-applet papirus-icon-theme gtk-engine-murrine
+	
+	echo "## Instalando Programas"
+	sleep 1
+	xbps-install firefox fastfetch alacritty mpv ristretto geany xarchiver htop conky unzip zip
+	
+	echo "## Instalando Suporte ao Scanner e Impressoras"
+	sleep 1
+	xbps-install cups sane 
+	
+	echo "## Instalando Componentes do Desktop"
+	sleep 1
+	xbps-install xdg-user-dirs-gtk pulseaudio alsa-plugins-pulse NetworkManager acpi xfce-polkit udisks2 blueman bluez pulseaudio-bluez pavucontrol tlp upower
+	
+	echo "## Instalando Dependências dos Scripts"
+	sleep 1
+	xbps-install pulseaudio-utils xclip brightnessctl ffmpeg clipnotify
+	
+	echo "## Instalando Pacotes Extras do Thunar"
+	sleep 1
+	xbps-install thunar-volman tumbler thunar-media-tags-plugin thunar-archive-plugin
+	
+	echo "## Instalando o Suporte a Flatpaks"
+	sleep 1
+	xbps-install flatpak
+}
+
+enableServices () {
+	sleep 1
+	
+	echo "## Ativando o LightDM"
+	sudo ln -s /etc/sv/lightdm /var/service/
+	
+	echo "## Ativando o Dbus"
+	sudo ln -s /etc/sv/dbus /var/service/
+	
+	echo "## Ativando o Network Manager"
+	sudo ln -s /etc/sv/networkmanager /var/service/
+	
+	echo "## Ativando o TLP"
+	sudo ln -s /etc/sv/tlp /var/service/
+	
+	echo "## Ativando o Bluetooth"
+	sudo ln -s /etc/sv/bluetoothd /var/service/	
+	
+	echo "## Ativando o CUPS"
+	sudo ln -s /etc/sv/cupsd /var/service/
+}
+
+#~ configUsers () {
+	#~ echo "## Configurando Usuários"
+	#~ if [ $# -eq 0 ]; then
+		#~ users=$(awk -F: '{if ($3<65000 && $3 >= 1000) print $1}' "$ROOT"/etc/passwd 2>/dev/null)
+		#~ if [ -z "$users" ]; then
+			#~ setup-user -g "audio,video,netdev,lp,plugdev" ## Verificar o Script completo e colocar a configuração dos Usuários aqui
+		#~ fi
+	#~ fi
+#~ }
+
+rebootNL () {
+	for sec in `seq 5 -1 1`; do
+			echo "## Reiniciando em $sec segundos"
+			sleep 1
+	done
+	reboot
+}
+
+installXorg
+installXFCE
+installFonts
+installApps
+doConfigs
+configLightDM
+enableServices
+#~ configUsers
+rebootNL
