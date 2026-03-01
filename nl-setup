@@ -68,7 +68,7 @@ installApps () {
 	apk add fastfetch alacritty mpv ristretto geany xarchiver htop conky zathura unzip zip conky
 	
 	echo "## Instalando Suporte ao Scanner e Impressoras"
-	sleep
+	sleep 1
 	apk add cups sane 
 	
 	echo "## Instalando Componentes do Desktop"
