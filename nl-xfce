@@ -51,8 +51,5 @@ configLightDM (){
 }
 
 
-#~ checkFolders
-#~ installFonts
-#~ doConfigs
-#~ configLightDM
-#~ rebootNL
+checkFolders
+
