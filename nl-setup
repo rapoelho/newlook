@@ -90,8 +90,8 @@ installApps () {
 
 installFonts () {
 	echo -e "\n## Instalando as Fontes..."
-	sudo cp fonts/* /usr/share/fonts
-	sudo fc-cache -fv
+	cp fonts/* /usr/share/fonts
+	fc-cache -fv
 }
 
 doConfigs () {
