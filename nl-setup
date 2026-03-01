@@ -4,6 +4,14 @@ set -e
 ## VARIABLES
 LightDMBack="Autumn Countryside Landscape.png"
 
+checkFolders () {
+	echo -e "\n## Verificando Diretórios..."
+	mkdir -p /etc/skel/.config
+	for d in /home/*; do 
+		mkdir /home/"$d"/.config
+	done
+}
+
 communityRepo() {
 	echo "## Ativando o Repositório Comunitário"
 	setup-apkrepos -o ## Verificar o Script completo e colocar a configuração do Repositório aqui
@@ -94,6 +102,17 @@ doConfigs () {
 	echo "## Copiando Scripts"
 	chmod +x scripts/*
 	cp scripts/* /usr/local/bin
+	
+	echo "## Copiando Configurações"
+	cp -r configs/* /etc/skel/.config
+	
+	for d in /home/*; do 
+		cp -r configs/* /home/"$d"/.config
+	done
+	
+	echo "## Instalando Temas..."
+	tar -czvf themes.tar.gz
+	cp -r themes/* /usr/share/themes/
 }
 
 configLightDM (){

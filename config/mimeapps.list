@@ -1,0 +1,9 @@
+[Default Applications]
+application/x-shellscript=geany.desktop
+text/plain=geany.desktop
+application/x-trash=geany.desktop
+
+[Added Associations]
+application/x-shellscript=geany.desktop;
+text/plain=geany.desktop;
+application/x-trash=geany.desktop;
