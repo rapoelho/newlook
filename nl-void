@@ -21,7 +21,7 @@ installXFCE () {
 installApps () {
 	echo "## Instalando Pacotes Extras do XFCE"
 	sleep 1
-	sudo xbps-install -y xfce4-power-manager xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-notifyd network-manager-applet papirus-icon-theme gtk-engine-murrine
+	sudo xbps-install -y xfce4-power-manager xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-notifyd network-manager-applet papirus-icon-theme gtk-engine-murrine adwaita-fonts
 	
 	echo "## Instalando Programas"
 	sleep 1

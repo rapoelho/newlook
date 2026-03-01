@@ -55,7 +55,7 @@ installXFCE () {
 installApps () {
 	echo "## Instalando Pacotes Extras do XFCE"
 	sleep 1
-	apk add xfce4-power-manager xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-notifyd network-manager-applet papirus-icon-theme gtk-murrine-engine
+	apk add xfce4-power-manager xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-notifyd network-manager-applet papirus-icon-theme gtk-murrine-engine adwaita-fonts
 	
 	echo "## Instalando Programas"
 	sleep 1
