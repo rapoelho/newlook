@@ -33,7 +33,7 @@ installApps () {
 	
 	echo "## Instalando Componentes do Desktop"
 	sleep 1
-	xbps-install -y xdg-user-dirs-gtk pulseaudio alsa-plugins-pulseaudio NetworkManager acpi xfce-polkit udisks2 blueman bluez pulseaudio-bluez pavucontrol tlp upower
+	xbps-install -y xdg-user-dirs-gtk pulseaudio alsa-plugins-pulseaudio NetworkManager acpi xfce-polkit udisks2 blueman bluez pavucontrol tlp upower
 	
 	echo "## Instalando Dependências dos Scripts"
 	sleep 1
