@@ -8,7 +8,7 @@ checkFolders () {
 	echo -e "\n## Verificando Diretórios..."
 	
 	if ! [ -d /usr/share/fonts ]; then
-		mkdir -p /usr/shate/fonts
+		mkdir -p /usr/share/fonts
 	fi
 	
 	if ! [ -d /etc/skel/.config ]; then
