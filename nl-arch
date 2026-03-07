@@ -15,7 +15,7 @@ installXorg (){
 installXFCE () {
 	echo "## Instalando o Desktop Básico"
 	sleep 1
-	sudo pacman -Syu --noconfirm --needed xfce4-appfinder xfce4-panel xfce4-session xfce4-settings xfconf xfdesktop xfwm4 xfce4-terminal Thunar exo xfce4-screensaver elogind gvfs lightdm lightdm-gtk-greeter xfce4-screensaver xfce4-terminal sound-theme-freedesktop 
+	sudo pacman -Syu --noconfirm --needed xfce4-appfinder xfce4-panel xfce4-session xfce4-settings xfconf xfdesktop xfwm4 xfce4-terminal thunar exo xfce4-screensaver gvfs lightdm lightdm-gtk-greeter xfce4-screensaver xfce4-terminal sound-theme-freedesktop 
 }
 
 installApps () {
@@ -33,7 +33,7 @@ installApps () {
 	
 	echo "## Instalando Componentes do Desktop"
 	sleep 1
-	sudo pacman -Syu --noconfirm --needed xdg-user-dirs-gtk pulseaudio alsa-plugins-pulseaudio NetworkManager acpi xfce-polkit udisks2 blueman bluez pavucontrol tlp upower
+	sudo pacman -Syu --noconfirm --needed xdg-user-dirs-gtk pulseaudio alsa-plugins-pulseaudio networkmanager acpi xfce-polkit udisks2 blueman bluez pavucontrol tlp upower
 	
 	echo "## Instalando Dependências dos Scripts"
 	sleep 1
