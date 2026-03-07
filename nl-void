@@ -4,6 +4,15 @@ set -e
 ## VARIABLES
 LightDMBack="Autumn Countryside Landscape.png"
 
+if [[ "$1" == "chroot" ]]; then
+	vChroot="yes"
+	echo "## Chroot: SIM"
+	svFolder="/etc/runit/runsvdir/default/"
+else
+	vChroot="no"
+	svFolder="/var/service/"
+fi
+
 source nl-xfce
 
 installXorg (){
