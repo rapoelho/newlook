@@ -33,7 +33,7 @@ installApps () {
 	
 	echo "## Instalando Componentes do Desktop"
 	sleep 1
-	sudo pacman -Syu --noconfirm --needed xdg-user-dirs-gtk pulseaudio alsa-plugins-pulseaudio networkmanager acpi xfce-polkit udisks2 blueman bluez pavucontrol tlp upower
+	sudo pacman -Syu --noconfirm --needed xdg-user-dirs-gtk pulseaudio pulseaudio-alsa networkmanager acpi polkit-gnome udisks2 blueman bluez pavucontrol tlp upower
 	
 	echo "## Instalando Dependências dos Scripts"
 	sleep 1
