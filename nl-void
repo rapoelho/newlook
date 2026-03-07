@@ -78,6 +78,9 @@ enableServices () {
 	
 	echo "## Ativando o CUPS"
 	sudo ln -s /etc/sv/cupsd /var/service/
+	
+	echo "## Apagando Cache"
+	sudo rm /var/cache/xbps/*
 }
 
 rebootNL () {

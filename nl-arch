@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+set -e
+
+## VARIABLES
+LightDMBack="Autumn Countryside Landscape.png"
+
+source nl-xfce
+
+installXorg (){
+	echo "## Instalando o Xorg"
+	sleep 1
+	sudo pacman -Syu --noconfirm --needed xorg
+}
+
+installXFCE () {
+	echo "## Instalando o Desktop Básico"
+	sleep 1
+	sudo pacman -Syu --noconfirm --needed xfce4-appfinder xfce4-panel xfce4-session xfce4-settings xfconf xfdesktop xfwm4 xfce4-terminal Thunar exo xfce4-screensaver elogind gvfs lightdm lightdm-gtk-greeter xfce4-screensaver xfce4-terminal sound-theme-freedesktop 
+}
+
+installApps () {
+	echo "## Instalando Pacotes Extras do XFCE"
+	sleep 1
+	sudo pacman -Syu --noconfirm --needed xfce4-power-manager xfce4-pulseaudio-plugin xfce4-screenshooter xfce4-notifyd network-manager-applet papirus-icon-theme gtk-engine-murrine adwaita-fonts
+	
+	echo "## Instalando Programas"
+	sleep 1
+	sudo pacman -Syu --noconfirm --needed firefox fastfetch alacritty mpv ristretto geany xarchiver htop conky unzip zip
+	
+	echo "## Instalando Suporte ao Scanner e Impressoras"
+	sleep 1
+	sudo pacman -Syu --noconfirm --needed cups sane 
+	
+	echo "## Instalando Componentes do Desktop"
+	sleep 1
+	sudo pacman -Syu --noconfirm --needed xdg-user-dirs-gtk pulseaudio alsa-plugins-pulseaudio NetworkManager acpi xfce-polkit udisks2 blueman bluez pavucontrol tlp upower
+	
+	echo "## Instalando Dependências dos Scripts"
+	sleep 1
+	sudo pacman -Syu --noconfirm --needed pulseaudio-utils xclip brightnessctl ffmpeg clipnotify
+	
+	echo "## Instalando Pacotes Extras do Thunar"
+	sleep 1
+	sudo pacman -Syu --noconfirm --needed thunar-volman tumbler thunar-media-tags-plugin thunar-archive-plugin
+	
+	echo "## Instalando o Suporte a Flatpaks"
+	sleep 1
+	sudo pacman -Syu --noconfirm --needed flatpak
+}
+
+enableServices () {
+	sleep 1
+	
+	echo "## Ativando o LightDM"
+	
+	sudo systemctl enable lightdm	
+	
+	#~ echo "## Ativando o Dbus"
+	#~ sudo ln -s /etc/sv/dbus /var/service/
+	
+	#~ if [[ -f "/var/service/dhcpcd" ]]; then
+		#~ echo "## Desativando o DHCPCD"
+		#~ sudo rm /var/service/dhcpcd
+	#~ fi
+	
+	#~ if [[ -f "/var/service/wpa_supplicant" ]]; then
+		#~ echo "## Desativando o WPA Supplicant"
+		#~ sudo rm /var/service/wpa_supplicant
+	#~ fi
+	
+	#~ echo "## Ativando o Network Manager"
+	#~ sudo ln -s /etc/sv/NetworkManager /var/service/
+	
+	#~ echo "## Ativando o TLP"
+	#~ sudo ln -s /etc/sv/tlp /var/service/
+	
+	echo "## Ativando o Bluetooth"
+	sudo systemctl enable bluetooth
+	
+	echo "## Ativando o CUPS"
+	sudo systemctl enable cups
+}
+
+rebootNL () {
+	for sec in `seq 5 -1 1`; do
+			echo "## Reiniciando em $sec segundos"
+			sleep 1
+	done
+	sudo reboot
+}
+
+installXorg
+installXFCE
+installFonts
+installApps
+doConfigs
+userConfigs
+configLightDM
+enableServices
+rebootNL
