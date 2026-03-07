@@ -7,10 +7,10 @@ LightDMBack="Autumn Countryside Landscape.png"
 if [[ "$1" == "chroot" ]]; then
 	vChroot="yes"
 	echo "## Chroot: SIM"
-	svFolder="/etc/runit/runsvdir/default/"
+	svFolder="/etc/runit/runsvdir/default"
 else
 	vChroot="no"
-	svFolder="/var/service/"
+	svFolder="/var/service"
 fi
 
 source nl-xfce
@@ -61,32 +61,32 @@ enableServices () {
 	sleep 1
 	
 	echo "## Ativando o LightDM"
-	sudo ln -s /etc/sv/lightdm /var/service/
+	sudo ln -s /etc/sv/lightdm $svFolder/
 	
 	echo "## Ativando o Dbus"
-	sudo ln -s /etc/sv/dbus /var/service/
+	sudo ln -s /etc/sv/dbus $svFolder/
 	
 	if [[ -f "/var/service/dhcpcd" ]]; then
 		echo "## Desativando o DHCPCD"
-		sudo rm /var/service/dhcpcd
+		sudo rm $svFolder/dhcpcd
 	fi
 	
 	if [[ -f "/var/service/wpa_supplicant" ]]; then
 		echo "## Desativando o WPA Supplicant"
-		sudo rm /var/service/wpa_supplicant
+		sudo rm $svFolder/wpa_supplicant
 	fi
 	
 	echo "## Ativando o Network Manager"
-	sudo ln -s /etc/sv/NetworkManager /var/service/
+	sudo ln -s /etc/sv/NetworkManager $svFolder/
 	
 	echo "## Ativando o TLP"
-	sudo ln -s /etc/sv/tlp /var/service/
+	sudo ln -s /etc/sv/tlp $svFolder/
 	
 	echo "## Ativando o Bluetooth"
-	sudo ln -s /etc/sv/bluetoothd /var/service/	
+	sudo ln -s /etc/sv/bluetoothd $svFolder/	
 	
 	echo "## Ativando o CUPS"
-	sudo ln -s /etc/sv/cupsd /var/service/
+	sudo ln -s /etc/sv/cupsd $svFolder/
 	
 	echo "## Apagando Cache"
 	sudo rm /var/cache/xbps/*
