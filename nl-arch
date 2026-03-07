@@ -37,7 +37,7 @@ installApps () {
 	
 	echo "## Instalando Dependências dos Scripts"
 	sleep 1
-	sudo pacman -Syu --noconfirm --needed pulseaudio-utils xclip brightnessctl ffmpeg clipnotify
+	sudo pacman -Syu --noconfirm --needed libpulse xclip brightnessctl ffmpeg clipnotify
 	
 	echo "## Instalando Pacotes Extras do Thunar"
 	sleep 1
