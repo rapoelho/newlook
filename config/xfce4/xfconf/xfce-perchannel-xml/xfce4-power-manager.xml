@@ -14,6 +14,9 @@
     <property name="critical-power-level" type="uint" value="15"/>
     <property name="show-presentation-indicator" type="bool" value="true"/>
     <property name="show-panel-label" type="int" value="3"/>
-    <property name="presentation-mode" type="bool" value="false"/>
+    <property name="presentation-mode" type="bool" value="true"/>
+    <property name="brightness-on-battery" type="uint" value="120"/>
+    <property name="brightness-step-count" type="uint" value="10"/>
+    <property name="handle-brightness-keys" type="bool" value="true"/>
   </property>
 </channel>

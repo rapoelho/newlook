@@ -8,8 +8,8 @@
   <property name="last-window-maximized" type="bool" value="true"/>
   <property name="last-details-view-zoom-level" type="string" value="THUNAR_ZOOM_LEVEL_38_PERCENT"/>
   <property name="last-details-view-column-widths" type="string" value="50,50,126,50,50,88,50,50,849,50,50,67,50,153"/>
-  <property name="last-window-width" type="int" value="640"/>
-  <property name="last-window-height" type="int" value="480"/>
+  <property name="last-window-width" type="int" value="675"/>
+  <property name="last-window-height" type="int" value="327"/>
   <property name="misc-single-click" type="bool" value="false"/>
   <property name="misc-use-csd" type="bool" value="false"/>
   <property name="misc-symbolic-icons-in-sidepane" type="bool" value="true"/>
