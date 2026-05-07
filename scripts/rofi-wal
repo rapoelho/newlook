@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+RASI="$HOME/.config/rofi/wall.rasi"
+confirmRASI="$HOME/.config/rofi/wallConfirm.rasi"
+walDir="/usr/share/backgrounds" # Wallpapers do Sistema
+wlist="$HOME/.cache/wlist" # Lista temporária de Wallpapers
+userPicsDir=$(xdg-user-dir PICTURES) # Diretório de Imagens
+IFS=$';' # Para fazer com que o laço FOR mantenha o nome dos arquivos intactos
+
+rofiMode () {
+	option1=" Set Wallpaper on All Desktops"
+	option2=" Set Wallpaper on Current Desktop"
+}
+
+runRofiMode () {
+	echo -e "$option1\n$option2\n$option3" | rofi -dmenu -theme $confirmRASI
+}
+
+applyWallAD () {
+	if [ -z "$(xfconf-query -c xfce4-desktop -l | grep last-image | grep workspace0)" ]; then
+		xrandr -q | grep "connected" | cut -d ' ' -f1 | while read monitor; do
+			xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor$monitor/workspace0/last-image -n -t string -s "$1" 
+		done
+	fi
+
+	xfconf-query -c xfce4-desktop -l | grep last-image | while read path; do
+		xfconf-query -c xfce4-desktop -p "$path" -s "$1"
+	done
+}
+
+applyWallCD () {
+	desktop=$(wmctrl -d | grep "*" | cut -d ' ' -f1)
+	primaryMonitor="$(xfconf-query -c displays -l | grep Primary | cut -d '/' -f3)"
+	currentWal="$(xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor$primaryMonitor/workspace0/last-image -v)"
+	singleDesktop="$(xfconf-query -c xfce4-desktop -p /backdrop/single-workspace-mode -v)"
+	
+	if [[ "$singleDesktop" == "true" ]]; then
+		xfconf-query -c xfce4-desktop -p /backdrop/single-workspace-mode -s false
+				
+		xfconf-query -c xfce4-desktop -l | grep last-image | while read path; do
+			xfconf-query -c xfce4-desktop -p "$path" -s "$currentWal"
+		done
+	fi
+		
+	xrandr -q | grep "connected" | cut -d ' ' -f1 | while read monitor; do
+		if [ -z "$(xfconf-query -c xfce4-desktop -l | grep last-image | grep monitor$monitor | grep workspace$desktop)" ]; then
+			xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor$monitor/workspace$desktop/last-image -n -t string -s "$1"
+		fi
+			
+		xfconf-query -c xfce4-desktop -l | grep last-image | grep monitor$monitor | grep workspace$desktop | while read path; do
+			xfconf-query -c xfce4-desktop -p "$path" -s "$1"
+		done
+	
+	done
+}
+
+selectMode () {
+	rofiMode
+	choose=$(runRofiMode)
+	
+	case ${choose} in
+	$option1)
+		applyWallAD "$walPath"
+        ;;
+    $option2)
+		applyWallCD "$walPath"
+    esac
+}
+
+getWal () {
+	# Verificando se há alguma pasta de Wallpapers no Usuário
+	if [ -d "$userPicsDir/Wallpapers" ]; then
+		find $userPicsDir/Wallpapers -iname '*.png' -o -iname '*.jpg' >> $wlist
+	elif [ -d "$userPicsDir/wallpapers" ]; then
+		find $userPicsDir/wallpapers -iname '*.png' -o -iname '*.jpg' >> $wlist
+	else
+		mkdir "$userPicsDir/Wallpapers"
+	fi
+}
+
+walList() {
+	find $walDir -iname '*.png' -o -iname '*.jpg' > $wlist
+	getWal			
+
+	while IFS= read -r tempWal; do
+		walName="$(cat $wlist | grep $tempWal | sed 's#.*/##')"
+		echo -en "$walName\0icon\x1f$tempWal\n"
+	done < $wlist
+}
+	
+wallpaper=$(walList | rofi -dmenu -theme $RASI) # Mostra o Rofi para escolher o Wallpaper
+walPath=$(cat $wlist | grep $(echo ${wallpaper#[[:space:]]*}))
+
+if [ x"Current" = x"${wallpaper}" ]; then
+	exit
+elif [ -n "${wallpaper}" ]; then	
+	selectMode
+fi

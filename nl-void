@@ -24,7 +24,7 @@ installXorg (){
 installXFCE () {
 	echo "## Instalando o Desktop Básico"
 	sleep 1
-	sudo xbps-install -y xfce4-appfinder xfce4-panel xfce4-session xfce4-settings xfconf xfdesktop xfwm4 xfce4-terminal Thunar exo xfce4-screensaver elogind gvfs lightdm lightdm-gtk-greeter xfce4-screensaver xfce4-terminal sound-theme-freedesktop 
+	sudo xbps-install -y xfce4-appfinder xfce4-panel xfce4-session xfce4-settings xfconf xfdesktop xfwm4 xfce4-terminal Thunar exo xfce4-screensaver elogind gvfs lightdm lightdm-gtk-greeter xfce4-screensaver xfce4-terminal sound-theme-freedesktop rofi
 }
 
 installApps () {

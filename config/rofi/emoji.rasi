@@ -1,0 +1,55 @@
+/**
+ * Copyright (C) 2020-2024 Aditya Shakya <adi1090x@gmail.com>
+ **/
+
+/*****----- Configuration -----*****/
+configuration {
+	drun-display-format:        "{name}";
+	window-format:              "{w} · {c} · {t}";
+}
+
+/*****----- Global Properties -----*****/
+@import                          "shared/colors.rasi"
+@import                          "shared/fonts.rasi"
+@import							 "shared/common.rasi"
+@import							 "shared/catppuccin-mocha.rasi"
+
+
+/*****----- Main Window -----*****/
+window {
+    width:                       450px;
+}
+
+prompt {
+    enabled:                     true;
+    background-color:            inherit;
+    text-color:                  inherit;
+}
+textbox-prompt-colon {
+    str:                         "󰞅 Emoji";
+    background-color:            @selected;
+    text-color:                  @background;
+}
+entry {
+    placeholder:                 "Search";
+}
+
+/*****----- Listview -----*****/
+listview {
+    enabled:                     true;
+    columns:                     1;
+    lines:                       10;
+    cycle:                       true;
+    dynamic:                     true;
+    scrollbar:                   false;
+    layout:                      vertical;
+    reverse:                     false;
+    fixed-height:                true;
+    fixed-columns:               true;
+    
+    spacing:                     5px;
+    margin:                      0px;
+    padding:                     0px;
+    border:                      0px solid;
+    border-radius:               0px;
+}
