@@ -5,6 +5,8 @@
 /*****----- Configuration -----*****/
 configuration {
     show-icons:                 false;
+    me-select-entry: "MousePrimary";
+	me-accept-entry: "!MousePrimary";
 }
 
 /*****----- Global Properties -----*****/
@@ -52,14 +54,14 @@ inputbar {
     border-radius:               0px;
     border-color:                @selected;
     background-color:            transparent;
-    text-color:                  @background;
-    children:                    [ "textbox-prompt-colon"];
+    text-color:                  @foreground;
+    children:                    [ "textbox-prompt-colon", "prompt"];
 }
 
 textbox-prompt-colon {
     enabled:                     true;
     expand:                      false;
-    str:                         " Screenshot";
+    str:                         " Power";
     padding:                     10px 12px;
     border-radius:               10px;
     background-color:            @selected;
@@ -94,7 +96,7 @@ textbox {
 /*****----- Listview -----*****/
 listview {
     enabled:                     true;
-    columns:                     5;
+    columns:                     6;
     lines:                       1;
     cycle:                       true;
     scrollbar:                   false;
@@ -128,7 +130,7 @@ element-text {
 element normal.normal,
 element alternate.normal {
     background-color:            var(background-alt);
-    text-color:                  var(selected); 
+    text-color:                  var(selected);
 }
 element normal.urgent,
 element alternate.urgent,

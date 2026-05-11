@@ -79,5 +79,11 @@ configLightDM (){
 	${superUser} sed -i 's|^icon-theme-name=.*|icon-theme-name=Papirus-Dark|' /etc/lightdm/lightdm-gtk-greeter.conf
 }
 
+if [[ "$1" == "update-sys-config" ]]; then
+	doConfigs
+elif [[ "$1" == "update-user-config" ]]; then
+	userConfigs
+fi
+
 superCmd
 checkFolders

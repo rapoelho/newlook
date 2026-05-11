@@ -15,7 +15,7 @@ installXorg (){
 installXFCE () {
 	echo "## Instalando o Desktop Básico"
 	sleep 1
-	sudo pacman -Syu --noconfirm --needed xfce4-appfinder xfce4-panel xfce4-session xfce4-settings xfconf xfdesktop xfwm4 xfce4-terminal thunar exo xfce4-screensaver gvfs lightdm lightdm-gtk-greeter xfce4-screensaver xfce4-terminal sound-theme-freedesktop 
+	sudo pacman -Syu --noconfirm --needed xfce4-appfinder xfce4-panel xfce4-session xfce4-settings xfconf xfdesktop xfwm4 xfce4-terminal thunar exo xfce4-screensaver gvfs lightdm lightdm-gtk-greeter xfce4-screensaver xfce4-terminal sound-theme-freedesktop rofi
 }
 
 installApps () {
@@ -54,26 +54,7 @@ enableServices () {
 	echo "## Ativando o LightDM"
 	
 	sudo systemctl enable lightdm	
-	
-	#~ echo "## Ativando o Dbus"
-	#~ sudo ln -s /etc/sv/dbus /var/service/
-	
-	#~ if [[ -f "/var/service/dhcpcd" ]]; then
-		#~ echo "## Desativando o DHCPCD"
-		#~ sudo rm /var/service/dhcpcd
-	#~ fi
-	
-	#~ if [[ -f "/var/service/wpa_supplicant" ]]; then
-		#~ echo "## Desativando o WPA Supplicant"
-		#~ sudo rm /var/service/wpa_supplicant
-	#~ fi
-	
-	#~ echo "## Ativando o Network Manager"
-	#~ sudo ln -s /etc/sv/NetworkManager /var/service/
-	
-	#~ echo "## Ativando o TLP"
-	#~ sudo ln -s /etc/sv/tlp /var/service/
-	
+		
 	echo "## Ativando o Bluetooth"
 	sudo systemctl enable bluetooth
 	
